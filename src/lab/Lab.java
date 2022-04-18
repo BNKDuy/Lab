@@ -55,6 +55,51 @@ public class Lab
         }
     }
     
+    //print the search result
+    public void print(ArrayList<Integer> arr)
+    {
+        for (int i = 0; i < arr.size(); i++)
+        {
+            System.out.println(name.get(arr.get(i)) + "(" + country.get(arr.get(i)) + ")" + "\nPoint: " + point.get(arr.get(i)) + "\nRank: " + rank.get(arr.get(i)) + "\n\n\n");
+        }
+    }
+    
+    //move to the next page
+    public static void nextPage()
+    {
+        for (int i = 0; i < 100; i++)
+        {
+            System.out.println();
+        }
+    }
+
+    //Return the Mean of the array
+    private static Double getMean(ArrayList<Integer> array) 
+    {
+        double total = 0;
+        for (double num : array) 
+        {
+            total += num;
+        }
+        return total / array.size();
+    }
+    
+    //Return the Standard deviation of the array
+    private static Double standardDeviation(ArrayList<Integer> array) 
+    {
+        double mean = getMean(array);
+        double sum = 0;
+        for (double x : array) 
+        {
+            sum += Math.pow(x - mean, 2);
+        }
+        double variance = sum / array.size();
+        return Math.sqrt(variance);
+    }
+    
+    //Methods for question1
+    
+    //this method return the arraylist with just only the value at index
     public static ArrayList<Integer> fillIntArray (ArrayList<Integer> arr, ArrayList<Integer> index)
     {
         ArrayList<Integer> out = new ArrayList<Integer>();
@@ -64,22 +109,6 @@ public class Lab
             out.add(arr.get(index.get(i)));
         }
         return out;
-    }
-    
-    // search and return the index of the target string that appear in the dataset
-    public ArrayList<Integer> targetSearch(ArrayList<String> arr, String target)
-    {
-        ArrayList<Integer> index = new ArrayList<Integer>();
-        
-        for (int i = 0; i < arr.size(); i++)
-        {
-            if (arr.get(i).equalsIgnoreCase(target))
-            {
-                index.add(i);
-            }
-        }
-        
-        return index;
     }
     
     //search and return the index of all values between the input range 
@@ -95,13 +124,36 @@ public class Lab
         return index;
     }
     
-    //print the search result
-    public void print(ArrayList<Integer> arr)
+    // Calculates Pearson coefficient
+    private static Double pearson(ArrayList<Integer> xAxis, ArrayList<Integer> yAxis) 
     {
+        double xMean = getMean(xAxis);
+        double yMean = getMean(yAxis);
+        int n = xAxis.size();
+        
+        double numerator = 0;
+        for (int i = 0; i < xAxis.size(); i++) {
+            numerator += (xAxis.get(i) - xMean)*(yAxis.get(i) - yMean);
+        }
+        return numerator / (n * standardDeviation(xAxis) * standardDeviation(yAxis));
+    }
+    
+    
+    
+    
+    //Methods for question2
+    
+    // search and return the index of the target string that appear in the dataset
+    public ArrayList<Integer> targetSearch(ArrayList<String> arr, String target)
+    {
+        ArrayList<Integer> index = new ArrayList<Integer>();
+        
         for (int i = 0; i < arr.size(); i++)
         {
-            System.out.println(name.get(arr.get(i)) + "(" + country.get(arr.get(i)) + ")" + "\nPoint: " + point.get(arr.get(i)) + "\nRank: " + rank.get(arr.get(i)) + "\n\n\n");
+            if (arr.get(i).equalsIgnoreCase(target)) index.add(i);
         }
+        
+        return index;
     }
     
     public static void fillContinentArray(String file, ArrayList<Integer> arr) throws IOException
@@ -121,51 +173,11 @@ public class Lab
         {
             for (int j = 0; j < list.size(); j++)
             {
-                if (country.get(i).equalsIgnoreCase(list.get(j))) 
-                {
-                    arr.add(i);
-                }
+                if (country.get(i).equalsIgnoreCase(list.get(j))) arr.add(i);              
             }
         }
     }
-    /*
-    public void continentFilter(int option) throws IOException
-    {
-        ArrayList<String> list = new ArrayList<String>();
-        
-        if (option == 1) list = continentFill("Asia.csv");
-        else if (option == 2) list = continentFill("Europe.csv");
-        else if (option == 3) list = continentFill("Africa.csv");
-        else if (option == 4) list = continentFill("NAmerica.csv");
-        else list = continentFill("SAmerica.csv");
-   
-        File in = new File("clubRanking.csv");
-        Scanner read = new Scanner(in);
-        read.useDelimiter(",|\r\n");
-        
-        
-        while(read.hasNext())
-        {
-            list.add(read.next());
-        }
-        
-        for (int i = 0; i < country.size(); i++)
-        {
-            for (int j = 0; j < list.size(); j++)
-            {
-                if (country.get(i).equalsIgnoreCase(list.get(j))) 
-                {
-                    if (option == 1) asia.add(i);
-                    else if (option == 1) europe.add(i);
-                    else if (option == 1) africa.add(i);
-                    else if (option == 1) europe.add(i);
-                    else if (option == 1) europe.add(i);
-                }
-            }
-        }
-            
-    }*/
-    
+
     public static void continentFill() throws IOException
     {
         fillContinentArray("Asia.csv", asia);
@@ -175,6 +187,7 @@ public class Lab
         fillContinentArray("SAmerica.csv", samerica);
     }
     
+    //This method calculate the central tendency (mean, median, mode) and standard deviation
     public static void centralTendency(ArrayList<Integer> arr)
     {
         double mean, median, mode;
@@ -207,64 +220,15 @@ public class Lab
         
         System.out.println("Mean: " + getMean(list));
         
-        if ((list.size() % 2) == 1)
-        {
-            System.out.println("Median: " + list.get(list.size()/2));
-        }
-        else 
-        {
-            System.out.println("Median: " + (((list.get(list.size()/2)) + ((list.get((list.size()/2) -1))))/2));
-        }
-        
+        if ((list.size() % 2) == 1) System.out.println("Median: " + list.get(list.size()/2));    
+        else System.out.println("Median: " + (((list.get(list.size()/2)) + ((list.get((list.size()/2) -1))))/2));
+
         System.out.println("Mode: " + maxValue);
         System.out.println("Standard deviation: " + standardDeviation(list) + "\n");
         
     }
     
-    public static void nextPage()
-    {
-        for (int i = 0; i < 100; i++)
-        {
-            System.out.println();
-        }
-    }
-
-    // Calculates Pearson coefficient
-    private static Double pearson(ArrayList<Integer> xAxis, ArrayList<Integer> yAxis) 
-    {
-        double xMean = getMean(xAxis);
-        double yMean = getMean(yAxis);
-        int n = xAxis.size();
-        
-        double numerator = 0;
-        for (int i = 0; i < xAxis.size(); i++) {
-            numerator += (xAxis.get(i) - xMean)*(yAxis.get(i) - yMean);
-        }
-        return numerator / (n * standardDeviation(xAxis) * standardDeviation(yAxis));
-    }
-    
-    //Return the Mean of the array
-    private static Double getMean(ArrayList<Integer> array) 
-    {
-        double total = 0;
-        for (double num : array) {
-            total += num;
-        }
-        return total / array.size();
-    }
-    
-    //Return the Standard deviation of the array
-    private static Double standardDeviation(ArrayList<Integer> array) 
-    {
-        double mean = getMean(array);
-        double sum = 0;
-        for (double x : array) {
-            sum += Math.pow(x - mean, 2);
-        }
-        double variance = sum / array.size();
-        return Math.sqrt(variance);
-    }
-    
+    //this method check the correlation coefficient and return the strength of the correlation
     public static void correlationStrength(Double pearson)
     {
         if (0.67 < pearson && pearson <= 1) System.out.print(GREEN + "Strong positive linear correlation" + RESET);
@@ -276,6 +240,7 @@ public class Lab
         else System.out.println(RED + "No correlation" + RESET);
     }
     
+    // This menu answer the first question
     public static void menu1()
     {
         int choose = -1;
@@ -363,6 +328,7 @@ public class Lab
         }
     }
     
+    //This menu answer the second question
     public static void menu2() throws IOException
     {
         ArrayList<String> countryList = new ArrayList<String>();
@@ -380,10 +346,13 @@ public class Lab
         System.out.println("North America");
         centralTendency(namerica);
         System.out.println("South America");
-        centralTendency(samerica);
-        
-        
+        centralTendency(samerica);   
     }
+    
+    
+    
+    
+    //MAIN METHOD
     public static void main(String[] args) throws IOException
     {
         int choose = -1;
@@ -392,19 +361,14 @@ public class Lab
         System.out.println("Enter \"0\" to stop the program" );
         System.out.println("1. Is there a strong connection between ranking and point scores? (assuming it is standardized)");
         System.out.println("2. Are there geographic (continental) connections between rankings?");
+        System.out.print("\nEnter your choice: ");
         choose = input.nextInt();
         
         data();
         while (choose != 0)
         {
-            if (choose == 1)
-            {
-                menu1();
-            }
-            else if (choose == 2)
-            {
-                menu2();
-            }
+            if (choose == 1) menu1();  
+            else if (choose == 2) menu2();
             System.out.println("Do you want to continue this program?\n" + GREEN + "1. Yes" + RESET + "\n" + RED + "0. No" + RESET);
             choose = input.nextInt();
             
@@ -414,6 +378,7 @@ public class Lab
                 System.out.println("Enter \"0\" to stop the program" );
                 System.out.println("1. Is there a strong connection between ranking and point scores? (assuming it is standardized)");
                 System.out.println("2. Are there geographic (continental) connections between rankings?");
+                System.out.print("\nEnter your choice: ");
                 choose = input.nextInt();
             }
         }     
