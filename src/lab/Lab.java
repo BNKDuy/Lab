@@ -56,7 +56,7 @@ public class Lab
     }
     
     //print the search result
-    public void print(ArrayList<Integer> arr)
+    public static void print(ArrayList<Integer> arr)
     {
         for (int i = 0; i < arr.size(); i++)
         {
@@ -96,6 +96,8 @@ public class Lab
         double variance = sum / array.size();
         return Math.sqrt(variance);
     }
+    
+    
     
     //Methods for question1
     
@@ -142,19 +144,6 @@ public class Lab
     
     
     //Methods for question2
-    
-    // search and return the index of the target string that appear in the dataset
-    public ArrayList<Integer> targetSearch(ArrayList<String> arr, String target)
-    {
-        ArrayList<Integer> index = new ArrayList<Integer>();
-        
-        for (int i = 0; i < arr.size(); i++)
-        {
-            if (arr.get(i).equalsIgnoreCase(target)) index.add(i);
-        }
-        
-        return index;
-    }
     
     public static void fillContinentArray(String file, ArrayList<Integer> arr) throws IOException
     {
@@ -254,12 +243,14 @@ public class Lab
         System.out.println("- Correlation Coeficient: " + pearson(rank, point));
         System.out.print("Strength of Linear Correlation: ");
         correlationStrength(pearson(rank, point));
-        System.out.println("\n\nDo you want to know further about this question?\n" + GREEN + "1. Yes" + RESET + "\n" + RED + "0. No" + RESET);
+        System.out.print("\n\nDo you want to know further about this question?\n" + GREEN + "1. Yes" + RESET + "\n" + RED + "0. No" + RESET + "\nEnter your choice: ");
         choose = input.nextInt();
-        System.out.println("The you want to search by rank or by point?\n1. Rank\n2. Point");
-        choose = input.nextInt();   
+          
         while (choose != 0)
-        {    
+        {  
+            System.out.print("The you want to search by rank or by point?\n1. Rank\n2. Point\nEnter your choice: ");
+            choose = input.nextInt(); 
+            
             if (choose == 1)
             {
                 System.out.println("Please enter the range of rank you want to investigate (integer only):");
@@ -317,24 +308,19 @@ public class Lab
                 System.out.println();
             }
             
-            System.out.println("\nDo you want to continue with question 1?\n" + GREEN + "1. Yes" + RESET + "\n" + RED + "0. No" + RESET);
+            System.out.print("\nDo you want to continue with question 1?\n" + GREEN + "1. Yes" + RESET + "\n" + RED + "0. No" + RESET + "\nEnter your choice: ");
             choose = input.nextInt();
-            
-            if (choose == 1)
-            {
-                System.out.println("\nThe you want to search by rank or by point?\n1. Rank\n2. Point");
-                choose = input.nextInt();
-            }
         }
     }
-    
+
     //This menu answer the second question
     public static void menu2() throws IOException
     {
-        ArrayList<String> countryList = new ArrayList<String>();
-        
+        int choose = -1;
         nextPage();
         continentFill();
+        String country = "Spain";
+        ArrayList<Integer> searchResult = new ArrayList<Integer>();
         
         System.out.println("\t\t\tQUESTION 2:");
         System.out.println("Asia:");
@@ -369,12 +355,12 @@ public class Lab
         {
             if (choose == 1) menu1();  
             else if (choose == 2) menu2();
-            System.out.println("Do you want to continue this program?\n" + GREEN + "1. Yes" + RESET + "\n" + RED + "0. No" + RESET);
+            System.out.print("\nDo you want to continue this program?\n" + GREEN + "1. Yes" + RESET + "\n" + RED + "0. No" + RESET + "\nEnter your choice: ");
             choose = input.nextInt();
             
             if (choose == 1)
             {
-                System.out.println("Which question do you want to answer?");
+                System.out.println("\nWhich question do you want to answer?");
                 System.out.println("Enter \"0\" to stop the program" );
                 System.out.println("1. Is there a strong connection between ranking and point scores? (assuming it is standardized)");
                 System.out.println("2. Are there geographic (continental) connections between rankings?");
